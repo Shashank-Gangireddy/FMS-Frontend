@@ -1,0 +1,19 @@
+html,body{
+    background-size:cover;
+    background-repeat: repeat;
+    height: 100%;
+    width: 100%;
+}
+
+.container{
+    height: 888px;
+    width: 1300px;
+    align-content:center;
+    }
+
+.card{
+    height: 330px;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 420px;
+}

@@ -1,0 +1,175 @@
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Course Management</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Services
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <button class="btn btn-outline-dark" class="dropdown-item" data-toggle="modal" data-target="#add" > Add course </button>
+        </div>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input type="search" (ngModelChange)="searchCourses(key.value)" #key="ngModel" ngModel
+      name="key" id="searchName" class="form-control mr-sm-2" placeholder="Search courses.." required>
+      </form>
+  </div>
+</nav>
+
+<br>
+
+
+<div class="container" >
+  <div class="row">
+  <div *ngFor="let c of cou">
+    <div class="col-sm-12">
+    <div class="card text-white bg-dark mb-3 " style="max-width: 50rem" >
+    <div class="card-header">{{c.courseName}}</div>
+    <div class="card-body">
+      <h5 class="card-title">ID : {{ c.courseId}}</h5>
+      <h5 class="card-title">Duration : {{ c.noOfDays}}</h5>
+      <p class="card-text">About : {{ c.courseDescription}}</p>
+      <button class="btn btn-outline-light" data-toggle="modal" data-target="#edit"> Edit </button> 
+      <button class="btn btn-outline-light" data-toggle="modal" data-target="#delete" (click)="edit(c)"> Delete</button>  
+    </div>
+  </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+  <!--Add Course-->
+  <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add Course</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="addform" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label for="courseId">Course Id</label>
+              <input [class.is-invalid]="addform.get('courseId').invalid && addform.get('courseId').touched" type="number" class="form-control" formControlName="courseId" id="CId" aria-describedby="emailHelp" placeholder="Enter Course Id">
+              <small id="IdHelp" class="form-text text-muted">We'll never share your Id with anyone else.</small>
+              <div *ngIf="addform.get('courseId').invalid && addform.get('courseId').touched">
+                <small *ngIf="addform.get('courseId').errors?.required" class="text-danger">Id is required</small>
+                <small *ngIf="addform.get('courseId').errors?.maxlength" class="text-danger">Id must be atleast 3 characters and a maximum of 4.</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="courseName">Course Name</label>
+              <input [class.is-invalid]="addform.get('courseName').invalid && addform.get('courseName').touched" type="text" class="form-control" formControlName="courseName" id="CourseName" placeholder="Course Name">
+              <div *ngIf="addform.get('courseName').invalid && addform.get('courseName').touched">
+                <small *ngIf="addform.get('courseName').errors?.required" class="text-danger">Name is required</small>
+              </div>
+            </div>
+            <div class="form-group">
+               <label for="courseDescription">Course Description</label>
+               <input [class.is-invalid]="addform.get('courseDescription').invalid && addform.get('courseDescription').touched" type="text" class="form-control" formControlName="courseDescription" id="Description" placeholder="Course Desc">
+               <div *ngIf="addform.get('courseDescription').invalid && addform.get('courseDescription').touched">
+                <small *ngIf="addform.get('courseDescription').errors?.required" class="text-danger">Description is a necessary to provide details of the course.</small>
+              </div>
+              </div>
+             <div class="form-group">
+               <label for="noOfDays">Duration</label>
+               <input [class.is-invalid]="addform.get('noOfDays').invalid && addform.get('noOfDays').touched" type="number" class="form-control" formControlName="noOfDays" id="noOfDays" placeholder="Duration">
+               <div *ngIf="addform.get('noOfDays').invalid && addform.get('noOfDays').touched">
+                <small *ngIf="addform.get('noOfDays').errors?.required" class="text-danger">Duration is a necessary to provide start and end date of the course.</small>
+              </div>
+              </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--Edit Course-->
+
+  <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Course</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="editform" (ngSubmit)="submitEdit()">
+            <div class="form-group">
+              <label for="courseId">Course Id</label>
+              <input [class.is-invalid]="editform.get('courseId').invalid && editform.get('courseId').touched" type="number" class="form-control" formControlName="courseId" id="CId" aria-describedby="emailHelp" placeholder="Enter Course Id">
+              <small id="IdHelp" class="form-text text-muted">We'll never share your Id with anyone else.</small>
+              <div *ngIf="editform.get('courseId').invalid && editform.get('courseId').touched">
+                <small *ngIf="editform.get('courseId').errors?.required" class="text-danger">Id is required</small>
+                <small *ngIf="editform.get('courseId').errors?.maxlength" class="text-danger">Id must be atleast 3 characters and a maximum of 4.</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="courseName">Course Name</label>
+              <input [class.is-invalid]="editform.get('courseName').invalid && editform.get('courseName').touched" type="text" class="form-control" formControlName="courseName" id="CourseName" placeholder="Course Name">
+              <div *ngIf="editform.get('courseName').invalid && editform.get('courseName').touched">
+                <small *ngIf="editform.get('courseName').errors?.required" class="text-danger">Name is required</small>
+              </div>
+            </div>
+            <div class="form-group">
+               <label for="courseDescription">Course Description</label>
+               <input [class.is-invalid]="editform.get('courseDescription').invalid && editform.get('courseDescription').touched" type="text" class="form-control" formControlName="courseDescription" id="Description" placeholder="Course Desc">
+               <div *ngIf="editform.get('courseDescription').invalid && editform.get('courseDescription').touched">
+                <small *ngIf="editform.get('courseDescription').errors?.required" class="text-danger">Description is a necessary to provide details of the course.</small>
+              </div>
+              </div>
+             <div class="form-group">
+               <label for="noOfDays">Duration</label>
+               <input [class.is-invalid]="editform.get('noOfDays').invalid && editform.get('noOfDays').touched" type="text" class="form-control" formControlName="noOfDays" id="noOfDays" placeholder="Duration">
+               <div *ngIf="editform.get('noOfDays').invalid && editform.get('noOfDays').touched">
+                <small *ngIf="editform.get('noOfDays').errors?.required" class="text-danger">Duration is a necessary to provide start and end date of the course.</small>
+              </div>
+              </div>
+            <button type="submit" class="btn btn-primary" >Save Changes</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--Delete Course-->
+  <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   <div class="modal-dialog" role="document">
+     <div class="modal-content">
+       <div class="modal-header">
+         <h5 class="modal-title" id="exampleModalLabel">Delete Course</h5>
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+         </button>
+       </div>
+       <div class="modal-body">
+         <p>Do you want to remove the specific Course?</p>
+       </div>
+       <div class="modal-footer">
+         <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+         <button type="button" (click)="Delete()" class="btn btn-primary">Yes</button>
+       </div>
+     </div>
+   </div>
+ </div>

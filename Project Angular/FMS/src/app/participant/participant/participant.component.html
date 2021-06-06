@@ -1,0 +1,80 @@
+<html>
+    <head>
+        <title>Participant</title>
+    </head>
+    <body>
+        <section id="parllax">
+        <h1> Hey <i> {{name}}, </i></h1>
+        <h4>here is the list of the courses, the feedbacks and their respective trainers.</h4>
+        <div class="center">
+        <button id="logout" type="button" class="btn btn-outline-secondary" routerLink="/login">Logout</button>
+      </div>
+        <br>
+        </section>
+        <section>
+            <div class="row" id="courses" *ngFor="let p of feedback">
+                <div class="col-sm-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title"><i> Course Name :</i> {{p.program.course.courseName}}</h5>
+                      <p class="card-text"><i>Course Description :</i> {{p.program.course.courseDescription}}</p>
+                      <p class="card-text"><i>Course Duration :</i> {{p.program.course.noOfDays}}</p>
+                      <button  class="btn btn-primary" data-toggle="modal" data-target="#View" (click)="view(p)" >View Feedbacks </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title"> <i>Trainer Name:</i> {{p.program.faculty.empName}}</h5>
+                      <p class="card-text"> <i>Trainer Id:</i> {{p.program.faculty.employeeId}}</p>
+                    </div>
+                  </div>
+                  <hr>
+                </div>
+              </div>
+              
+        </section>
+    </body>
+</html>
+
+
+<!--Modal to view feedbacks-->
+<!-- Button trigger modal -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="View" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Feedbacks</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          
+            <div *ngFor="let f of viewfeedback" class="card" style="width: 30rem;">
+                <div class="card-body">
+                  <h5 class="card-title">Feedback Id : {{f.feedback_Id}} </h5>
+                  <p class="card-text">Program Id : {{f.program.trainingId}}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">The objectives of the program were clearly defined. :<b>{{f.feedbackCriteria1}} </b> </li>
+                  <li class="list-group-item">The content was organised and easy to follow. : <b> {{f.feedbackCriteria2}} </b></li>
+                  <li class="list-group-item">The trainer was well prepared. : <b> {{f.feedbackCriteria3}} </b></li>
+                  <li class="list-group-item">The training objectives were met. : <b> {{f.feedbackCriteria4}} </b> </li>
+                  <li class="list-group-item">The training experiences will be useful in my work. : <b>{{f.feedbackCriteria5}} </b> </li>
+                  <li class="list-group-item">Comments : <b> {{f.comments}} </b></li>
+                  <li class="list-group-item">Suggestions : <b> {{f.suggestions}} </b></li>
+                </ul>
+              </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+

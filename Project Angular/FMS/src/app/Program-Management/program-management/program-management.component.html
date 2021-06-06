@@ -1,0 +1,199 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Program Management</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Services
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <button class="btn btn-outline-dark" class="dropdown-item" data-toggle="modal" data-target="#add" > Add Program </button>
+        </div>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      </form>
+  </div>
+</nav>
+
+<br>
+
+<div class="container" >
+  <div class="row">
+  <div  *ngFor="let pr of prog">
+    <div class="col-sm-12">
+<div class="card border-info mb-3 sm" style="max-width: 30rem" >
+    <div class="card-header">Program Id : {{pr.trainingId}}</div>
+    <div class="card-body">
+      <h5 class="card-title">Start Date : {{pr.startDate}}</h5>
+      <h5 class="card-title">End Date : {{pr.endDate}}</h5>
+      <h5 class="card-title">Course Name : {{pr.course.courseName}}</h5>
+      <h5 class="card-title">Duration : {{pr.course.courseDescription}}</h5>
+      <h5 class="card-title">Trainer : {{pr.faculty.employeeId}}</h5>
+      <h5 class="card-title">Days : {{pr.course.noOfDays}}</h5>
+      <button class="btn btn-outline-dark" data-toggle="modal" data-target="#edit"> Edit </button> 
+      <button class="btn btn-outline-dark" data-toggle="modal" data-target="#delete" (click)="deleteId(pr)"> Delete</button>  
+    </div>
+  </div>
+  </div>
+  </div>
+</div>
+</div>
+
+ <!--Add Program-->
+<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Program</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <small>Note : The process of adding program goes by: <b>SUBMIT -> SEND -> POST.</b></small>
+     <form [formGroup]="addform"  (ngSubmit)="onSubmit()">
+     <div class="form-group">
+      <label for="trainingId">Training Id</label>
+      <input [class.is-invalid]="addform.get('trainingId').invalid && addform.get('trainingId').touched" type="number" class="form-control" formControlName="trainingId" id="TId" aria-describedby="emailHelp" placeholder="Enter Trainer Id">
+      <small id="IdHelp" class="form-text text-muted">We'll never share your Id with anyone else.</small>
+      <div *ngIf="addform.get('trainingId').invalid && addform.get('trainingId').touched">
+        <small *ngIf="addform.get('trainingId').errors?.required" class="text-danger">Training Id is required</small>
+      </div>  
+    </div>
+    <div class="form-group">
+      <label for="startDate">Start Date</label>
+      <input [class.is-invalid]="addform.get('startDate').invalid && addform.get('startDate').touched" type="text" class="form-control" formControlName="startDate" id="startDate" placeholder="startDate">
+      <small id="IdHelp" class="form-text text-muted">Date format : YYYY - MM - DD .</small>
+      <div *ngIf="addform.get('startDate').invalid && addform.get('startDate').touched">
+        <small *ngIf="addform.get('startDate').errors?.required" class="text-danger">Start Date is required to notify when the program starts.</small>
+      </div>  
+    </div>
+    <div class="form-group">
+       <label for="endDate">End Date</label>
+       <input [class.is-invalid]="addform.get('endDate').invalid && addform.get('endDate').touched" type="text" class="form-control" formControlName="endDate" id="endDate" placeholder="endDate">
+       <small id="IdHelp" class="form-text text-muted">Date format : YYYY - MM - DD .</small>
+       <div *ngIf="addform.get('endDate').invalid && addform.get('endDate').touched">
+        <small *ngIf="addform.get('endDate').errors?.required" class="text-danger">End Date is required to notify when the program ends.</small>
+      </div>  
+      </div> 
+     <div class="form-group">
+       <label for="courseId">Course Id</label>
+       <input [class.is-invalid]="addform.get('courseId').invalid && addform.get('courseId').touched" type="number" class="form-control" formControlName="courseId" id="courseId" placeholder="Course Id">
+       <div *ngIf="addform.get('courseId').invalid && addform.get('courseId').touched">
+        <small *ngIf="addform.get('courseId').errors?.required" class="text-danger">Id is required</small>
+        <small *ngIf="addform.get('courseId').errors?.maxlength" class="text-danger">Id must be atleast 3 characters and a maximum of 4.</small>
+      </div>
+      </div>
+     <div class="form-group">
+        <label for="employeeId">Trainer Id</label>
+        <input [class.is-invalid]="addform.get('employeeId').invalid && addform.get('employeeId').touched" type="number" class="form-control" formControlName="employeeId" id="employeeId" placeholder="Employee Id">
+        <div *ngIf="addform.get('employeeId').invalid && addform.get('employeeId').touched">
+          <small *ngIf="addform.get('employeeId').errors?.required" class="text-danger">UserId is required</small>
+          <small *ngIf="addform.get('employeeId').errors?.minlength" class="text-danger">UserId must be atleast 4 characters.</small>
+        </div>
+      </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="editpost()">Send</button>
+  <button type="button" class="btn btn-primary" (click)="post()" >Post</button>
+  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<!---Edit Program-->>
+<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Program</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <small>Note : The process of adding program goes by:<b> SUBMIT -> SEND -> POST.</b></small>
+     <form [formGroup]="Editform"  (ngSubmit)="onEdit()">
+     <div class="form-group">
+      <label for="trainingId">Training Id</label>
+      <input [class.is-invalid]="Editform.get('trainingId').invalid && Editform.get('trainingId').touched" type="number" class="form-control" formControlName="trainingId" id="TId" aria-describedby="emailHelp" placeholder="Enter Trainer Id">
+      <small id="IdHelp" class="form-text text-muted">We'll never share your Id with anyone else.</small>
+      <div *ngIf="Editform.get('trainingId').invalid && Editform.get('trainingId').touched">
+        <small *ngIf="Editform.get('trainingId').errors?.required" class="text-danger">Training Id is required</small>
+      </div>  
+    </div>
+    <div class="form-group">
+      <label for="startDate">Start Date</label>
+      <input [class.is-invalid]="Editform.get('startDate').invalid && Editform.get('startDate').touched" type="text" class="form-control" formControlName="startDate" id="startDate" placeholder="startDate">
+      <small id="IdHelp" class="form-text text-muted">Date format : YYYY - MM - DD .</small>
+      <div *ngIf="Editform.get('startDate').invalid && Editform.get('startDate').touched">
+        <small *ngIf="Editform.get('startDate').errors?.required" class="text-danger">Start Date is required to notify when the program starts.</small>
+      </div>
+    </div>
+    <div class="form-group">
+       <label for="endDate">End Date</label>
+       <input [class.is-invalid]="Editform.get('endDate').invalid && Editform.get('endDate').touched" type="text" class="form-control" formControlName="endDate" id="endDate" placeholder="endDate">
+       <small id="IdHelp" class="form-text text-muted">Date format : YYYY - MM - DD .</small>
+       <div *ngIf="Editform.get('endDate').invalid && Editform.get('endDate').touched">
+        <small *ngIf="Editform.get('endDate').errors?.required" class="text-danger">End Date is required to notify when the program ends.</small>
+      </div>
+      </div> 
+     <div class="form-group">
+       <label for="courseId">Course Id</label>
+       <input [class.is-invalid]="Editform.get('courseId').invalid && Editform.get('courseId').touched" type="number" class="form-control" formControlName="courseId" id="courseId" placeholder="Course Id">
+       <div *ngIf="Editform.get('courseId').invalid && Editform.get('courseId').touched">
+        <small *ngIf="Editform.get('courseId').errors?.required" class="text-danger">Id is required</small>
+        <small *ngIf="Editform.get('courseId').errors?.maxlength" class="text-danger">Id must be atleast 3 characters and a maximum of 4.</small>
+      </div>   
+      </div>
+     <div class="form-group">
+        <label for="employeeId">Trainer Id</label>
+        <input [class.is-invalid]="Editform.get('employeeId').invalid && Editform.get('employeeId').touched" type="number" class="form-control" formControlName="employeeId" id="employeeId" placeholder="Employee Id">
+        <div *ngIf="Editform.get('employeeId').invalid && Editform.get('employeeId').touched">
+          <small *ngIf="Editform.get('employeeId').errors?.required" class="text-danger">Username is required</small>
+          <small *ngIf="Editform.get('employeeId').errors?.minlength" class="text-danger">Username must be atleast 4 characters.</small>
+        </div>
+      </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="editput()">Send</button>
+  <button type="button" class="btn btn-primary" (click)="post()" >Put</button>
+  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+
+
+ <!--Delete Course-->
+ <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete Course</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Do you want to remove the specific Program?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button type="button" (click)="onDelete()" class="btn btn-primary">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>

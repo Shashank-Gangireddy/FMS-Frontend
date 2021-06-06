@@ -1,0 +1,252 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" style="color:rgb(255, 255, 255);">Feedback Manager</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarColor02">
+       <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+             <button class="nav-link" class="btn btn-outline-light"  data-toggle="modal" data-target="#add" >Add Feedback</button>
+          </li>
+       </ul>
+    </div>
+  </nav>
+
+  <br>
+
+<div  class="container">
+  <div class="row">
+  <div *ngFor="let f of feedback" class="card" style="width: 30rem;">
+  <div class="col-sm-12">
+    <div class="card-body">
+      <h5 class="card-title">Feedback Id : {{f.feedback_Id}} </h5>
+      <p class="card-text">Program Id : {{f.program.trainingId}}</p>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">The objectives of the program were clearly defined. :<b>{{f.feedbackCriteria1}} </b> </li>
+      <li class="list-group-item">The content was organised and easy to follow. : <b> {{f.feedbackCriteria2}} </b></li>
+      <li class="list-group-item">The trainer was well prepared. : <b> {{f.feedbackCriteria3}} </b></li>
+      <li class="list-group-item">The training objectives were met. : <b> {{f.feedbackCriteria4}} </b> </li>
+      <li class="list-group-item">The training experiences will be useful in my work. : <b>{{f.feedbackCriteria5}} </b> </li>
+      <li class="list-group-item">Comments : <b> {{f.comments}} </b></li>
+      <li class="list-group-item">Suggestions : <b> {{f.suggestions}} </b></li>
+    </ul>
+    <div class="card-body">
+      <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#edit">Edit</button>
+      <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#delete" (click)="onDel(f)">Delete</button>
+    </div>
+    </div>
+  </div>
+ </div>
+</div>
+
+
+  <!--Add feedback-->
+  <!-- Modal -->
+  <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add Feedback</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <small>Note : The process of adding program goes by: <b>SUBMIT -> POST -> SEND.</b></small>
+            <form [formGroup]="addform" (ngSubmit)="disp()">
+                <div class="form-group">
+                 <label for="feedback_Id">Feedback Id</label>
+                 <input [class.is-invalid]="addform.get('feedback_Id').invalid && addform.get('feedback_Id').touched" type="number" class="form-control" formControlName="feedback_Id" id="TId" aria-describedby="emailHelp" placeholder="Enter Trainer Id">
+                 <small id="IdHelp" class="form-text text-muted">Choose an ID you want to map your feedback with.</small>
+                 <div *ngIf="addform.get('feedback_Id').invalid && addform.get('feedback_Id').touched">
+                  <small *ngIf="addform.get('feedback_Id').errors?.required" class="text-danger">Feedback Id is required</small>
+                </div> 
+                </div>
+               <div class="form-group">
+                 <label for="trainingId">Program Id</label>
+                 <input [class.is-invalid]="addform.get('trainingId').invalid && addform.get('trainingId').touched" type="number" class="form-control" formControlName="trainingId" id="trainingId" placeholder="trainingId">
+                 <div *ngIf="addform.get('trainingId').invalid && addform.get('trainingId').touched">
+                  <small *ngIf="addform.get('trainingId').errors?.required" class="text-danger">Training Id is required</small>
+                </div>  
+                </div>
+               <div class="form-group">
+                  <label for="feedbackCriteria1">1. The objectives of the program were clearly defined.</label>
+                  <input [class.is-invalid]="addform.get('feedbackCriteria1').invalid && addform.get('feedbackCriteria1').touched" type="number" class="form-control" formControlName="feedbackCriteria1" id="feedbackCriteria1" placeholder="feedbackCriteria1">
+                  <small id="IdHelp" class="form-text text-muted">Feedback rating : 1-"Least" to 10-"Highest".</small>
+                  <div *ngIf="addform.get('feedbackCriteria1').invalid && addform.get('feedbackCriteria1').touched">
+                    <small *ngIf="addform.get('feedbackCriteria1').errors?.required" class="text-danger">Feedback is required.</small>
+                  </div> 
+                </div> 
+                <div class="form-group">
+                  <label for="feedbackCriteria2">2. The content was organised and easy to follow. </label>
+                  <input [class.is-invalid]="addform.get('feedbackCriteria2').invalid && addform.get('feedbackCriteria2').touched" type="number" class="form-control" formControlName="feedbackCriteria2" id="feedbackCriteria2" placeholder="feedbackCriteria2 ">
+                  <small id="IdHelp" class="form-text text-muted">Feedback rating : 1-"Least" to 10-"Highest".</small>
+                  <div *ngIf="addform.get('feedbackCriteria2').invalid && addform.get('feedbackCriteria2').touched">
+                    <small *ngIf="addform.get('feedbackCriteria2').errors?.required" class="text-danger">Feedback is required.</small>
+                  </div> 
+                </div>
+                <div class="form-group">
+                    <label for="feedbackCriteria3">3. The trainer was well prepared. </label>
+                    <input  [class.is-invalid]="addform.get('feedbackCriteria3').invalid && addform.get('feedbackCriteria3').touched" type="number" class="form-control" formControlName="feedbackCriteria3" id="feedbackCriteria3" placeholder="feedbackCriteria3 ">
+                    <small id="IdHelp" class="form-text text-muted">Feedback rating : 1-"Least" to 10-"Highest".</small>
+                    <div *ngIf="addform.get('feedbackCriteria3').invalid && addform.get('feedbackCriteria3').touched">
+                      <small *ngIf="addform.get('feedbackCriteria3').errors?.required" class="text-danger">Feedback is required.</small>
+                    </div> 
+                  </div>
+                  <div class="form-group">
+                    <label for="feedbackCriteria4">4. The training objectives were met. </label>
+                    <input type="number" class="form-control" formControlName="feedbackCriteria4" id="feedbackCriteria4" placeholder="feedbackCriteria4">
+                    <small id="IdHelp" class="form-text text-muted">Feedback rating : 1-"Least" to 10-"Highest".</small>
+                    <div *ngIf="addform.get('feedbackCriteria4').invalid && addform.get('feedbackCriteria4').touched">
+                      <small *ngIf="addform.get('feedbackCriteria4').errors?.required" class="text-danger">Feedback is required.</small>
+                    </div> 
+                  </div>
+                  <div class="form-group">
+                    <label for="feedbackCriteria5">5. The training experiences will be useful in my work. </label>
+                    <input [class.is-invalid]="addform.get('feedbackCriteria5').invalid && addform.get('feedbackCriteria5').touched" type="number" class="form-control" formControlName="feedbackCriteria5" id="feedbackCriteria5" placeholder="feedbackCriteria5">
+                    <small id="IdHelp" class="form-text text-muted">Feedback rating : 1-"Least" to 10-"Highest".</small>
+                    <div *ngIf="addform.get('feedbackCriteria5').invalid && addform.get('feedbackCriteria5').touched">
+                      <small *ngIf="addform.get('feedbackCriteria5').errors?.required" class="text-danger">Feedback is required.</small>
+                    </div> 
+                  </div>
+                  <div class="form-group">
+                    <label for="comments">Comments (If any) </label>
+                    <input [class.is-invalid]="addform.get('comments').invalid && addform.get('comments').touched" type="text" class="form-control" formControlName="comments" id="comments" placeholder="comments">
+                    <div *ngIf="addform.get('comments').invalid && addform.get('comments').touched">
+                      <small *ngIf="addform.get('comments').errors?.required" class="text-danger">Comments are necessary. Incase of no comments just enter "none".</small>
+                    </div> 
+                  </div>
+                  <div class="form-group">
+                    <label for="suggestions">Suggestions </label>
+                    <input [class.is-invalid]="addform.get('suggestions').invalid && addform.get('suggestions').touched" type="text" class="form-control" formControlName="suggestions" id="suggestions" placeholder="suggestions">
+                    <div *ngIf="addform.get('suggestions').invalid && addform.get('suggestions').touched">
+                      <small *ngIf="addform.get('suggestions').errors?.required" class="text-danger">Suggestions are necessary. Incase of no suggestions just enter "none".</small>
+                    </div>  
+                  </div>
+               <button type="submit" class="btn btn-primary">Submit</button>
+             </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="editpost()">Post</button>
+            <button type="button" class="btn btn-primary" (click)="post()">Send</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--Edit modal-->
+  <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Feedback</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="editform" (ngSubmit)="disp2()">
+                <div class="form-group">
+                 <label for="feedback_Id">Feedback Id</label>
+                 <input [class.is-invalid]="editform.get('feedback_Id').invalid && editform.get('feedback_Id').touched" type="number" class="form-control" formControlName="feedback_Id" id="TId" aria-describedby="emailHelp" placeholder="Enter Trainer Id">
+                 <small id="IdHelp" class="form-text text-muted">Choose an ID you want to map your feedback with.</small>
+                 <div *ngIf="addform.get('feedback_Id').invalid && addform.get('feedback_Id').touched">
+                  <small *ngIf="addform.get('feedback_Id').errors?.required" class="text-danger">Feedback Id is required</small>
+                </div> 
+                 </div>
+               <div class="form-group">
+                 <label for="trainingId">Program Id</label>
+                 <input [class.is-invalid]="editform.get('trainingId').invalid && editform.get('trainingId').touched" type="number" class="form-control" formControlName="trainingId" id="trainingId" placeholder="trainingId">
+                 <div *ngIf="addform.get('trainingId').invalid && addform.get('trainingId').touched">
+                  <small *ngIf="addform.get('trainingId').errors?.required" class="text-danger">Training Id is required</small>
+                </div> 
+                </div>
+               <div class="form-group">
+                  <label for="feedbackCriteria1">1. The objectives of the program were clearly defined.</label>
+                  <input [class.is-invalid]="editform.get('feedbackCriteria1').invalid && editform.get('feedbackCriteria1').touched" type="number" class="form-control" formControlName="feedbackCriteria1" id="feedbackCriteria1" placeholder="feedbackCriteria1">
+                  <small id="IdHelp" class="form-text text-muted">Feedback rating : 1-"Least" to 10-"Highest".</small>
+                  <div *ngIf="editform.get('feedbackCriteria1').invalid && editform.get('feedbackCriteria1').touched">
+                    <small *ngIf="editform.get('feedbackCriteria1').errors?.required" class="text-danger">Feedback is required.</small>
+                  </div> 
+                </div> 
+                <div class="form-group">
+                  <label for="feedbackCriteria2">2. The content was organised and easy to follow. </label>
+                  <input [class.is-invalid]="editform.get('feedbackCriteria2').invalid && editform.get('feedbackCriteria2').touched" type="number" class="form-control" formControlName="feedbackCriteria2" id="feedbackCriteria2" placeholder="feedbackCriteria2 ">
+                  <small id="IdHelp" class="form-text text-muted">Feedback rating : 1-"Least" to 10-"Highest".</small>
+                  <div *ngIf="editform.get('feedbackCriteria2').invalid && editform.get('feedbackCriteria2').touched">
+                    <small *ngIf="editform.get('feedbackCriteria2').errors?.required" class="text-danger">Feedback is required.</small>
+                  </div> 
+                </div>
+                <div class="form-group">
+                    <label for="feedbackCriteria3">3. The trainer was well prepared. </label>
+                    <input [class.is-invalid]="editform.get('feedbackCriteria3').invalid && editform.get('feedbackCriteria3').touched" type="number" class="form-control" formControlName="feedbackCriteria3" id="feedbackCriteria3" placeholder="feedbackCriteria3 ">
+                    <small id="IdHelp" class="form-text text-muted">Feedback rating : 1-"Least" to 10-"Highest".</small>
+                  <div *ngIf="editform.get('feedbackCriteria3').invalid && editform.get('feedbackCriteria3').touched">
+                    <small *ngIf="editform.get('feedbackCriteria3').errors?.required" class="text-danger">Feedback is required.</small>
+                  </div> 
+                  </div>
+                  <div class="form-group">
+                    <label for="feedbackCriteria4">4. The training objectives were met. </label>
+                    <input [class.is-invalid]="editform.get('feedbackCriteria4').invalid && editform.get('feedbackCriteria4').touched" type="number" class="form-control" formControlName="feedbackCriteria4" id="feedbackCriteria4" placeholder="feedbackCriteria4">
+                    <small id="IdHelp" class="form-text text-muted">Feedback rating : 1-"Least" to 10-"Highest".</small>
+                  <div *ngIf="editform.get('feedbackCriteria4').invalid && editform.get('feedbackCriteria4').touched">
+                    <small *ngIf="editform.get('feedbackCriteria4').errors?.required" class="text-danger">Feedback is required.</small>
+                  </div> 
+                  </div>
+                  <div class="form-group">
+                    <label for="feedbackCriteria5">5. The training experiences will be useful in my work. </label>
+                    <input [class.is-invalid]="editform.get('feedbackCriteria5').invalid && editform.get('feedbackCriteria5').touched" type="number" class="form-control" formControlName="feedbackCriteria5" id="feedbackCriteria5" placeholder="feedbackCriteria5">
+                    <small id="IdHelp" class="form-text text-muted">Feedback rating : 1-"Least" to 10-"Highest".</small>
+                  <div *ngIf="editform.get('feedbackCriteria5').invalid && editform.get('feedbackCriteria5').touched">
+                    <small *ngIf="editform.get('feedbackCriteria5').errors?.required" class="text-danger">Feedback is required.</small>
+                  </div> 
+                  </div>
+                  <div class="form-group">
+                    <label for="comments">Comments (If any) </label>
+                    <input [class.is-invalid]="editform.get('comments').invalid && editform.get('comments').touched" type="text" class="form-control" formControlName="comments" id="comments" placeholder="comments">
+                    <div *ngIf="editform.get('comments').invalid && editform.get('comments').touched">
+                      <small *ngIf="editform.get('comments').errors?.required" class="text-danger">Comments are necessary. Incase of no comments just enter "none".</small>
+                    </div> 
+                  </div>
+                  <div class="form-group">
+                    <label for="suggestions">Suggestions </label>
+                    <input [class.is-invalid]="editform.get('suggestions').invalid && editform.get('suggestions').touched" type="text" class="form-control" formControlName="suggestions" id="suggestions" placeholder="suggestions">
+                    <div *ngIf="editform.get('suggestions').invalid && editform.get('suggestions').touched">
+                      <small *ngIf="editform.get('suggestions').errors?.required" class="text-danger">Suggestions are necessary. Incase of no suggestions just enter "none".</small>
+                    </div>  
+                  </div>
+               <button type="submit" class="btn btn-primary">Submit</button>
+             </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="editput()">Post</button>
+            <button type="button" class="btn btn-primary" (click)="put()">Send</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Delete Feedback-->
+  <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Delete Feedback</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Do you want to remove the specific Feedback?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+          <button type="button" (click)="onDelete()" class="btn btn-primary">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>

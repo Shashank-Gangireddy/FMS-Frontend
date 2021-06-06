@@ -1,0 +1,26 @@
+#logout{
+    float: right;
+}
+
+body{
+    margin: 5%;
+    padding: 1%;
+}
+
+body{
+    background-image: url("./adminbg.jpg");
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+h2{
+    text-align: right;
+}
+
+.get{
+    padding: 1%;
+}
+
+
+
